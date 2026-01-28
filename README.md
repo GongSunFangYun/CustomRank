@@ -58,34 +58,263 @@ A comprehensive and feature-rich rank management plugin for Nukkit servers, prov
 /rank give @r Helper 30m
 ```
 
-## Build Support
+# Building from Source
 
-### Prerequisites
-- Java 21 or higher
-- Maven 3.6+
-- Nukkit API
+## Prerequisites
+- **Java 21 or higher**
+- **Apache Maven 3.6+**
+- **Git**
 
-### Build Steps
-1. Clone the repository:
+## Clone the Repository and Install Requirements
 ```bash
 git clone https://github.com/GongSunFangYun/CustomRank.git
-```
-
-2. Navigate to the project directory:
-```bash
 cd CustomRank
+mvn install
 ```
 
-3. Install Requirements and Build the plugin:
-```bash
-mvn install
-mvn clean package
+## Project Structure
 ```
+CustomRank/
+├── src/main/java/cn/gsfy/
+│   ├── RankMain.java          # Main plugin class
+│   ├── RankCommand.java       # Command handler and event listener
+│   ├── RankForm.java          # GUI form manager
+│   ├── RankScheduler.java     # Rank expiration scheduler
+│   ├── RankVariable.java      # Tips variable integration
+│   └── RankVarRegister.java   # Variable registration
+├── pom.xml                    # Maven configuration
+└── README.md                  # Documentation
+```
+
+## Build Process
+
+### 1. Compile the Plugin
+```bash
+mvn clean compile
+```
+
+### 2. Package into JAR
+```bash
+mvn package
+```
+
+### 3. Locate the Output
+The compiled JAR file will be available at:
+```
+target/CustomRank-1.6.8.jar
+```
+
+## Maven Configuration Details
+
+The `pom.xml` file configures the following:
+
+### Java Version
+- **Source Compatibility**: Java 21
+- **Target Compatibility**: Java 21
 
 ### Dependencies
-The plugin requires the following dependencies during compilation:
-- Nukkit API (included via Maven)
-- Lombok (for cleaner code, optional)
+```xml
+<dependency>
+    <groupId>cn.nukkit</groupId>
+    <artifactId>nukkit</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <scope>provided</scope>
+</dependency>
+
+<dependency>
+	<groupId>com.smallaswater.tips</groupId>
+	<artifactId>Tips</artifactId>
+	<version>2.2.2</version>
+	<scope>provided</scope>
+</dependency>
+```
+
+**Note**: The `provided` scope means Nukkit API is expected to be available at runtime and is not bundled in the final JAR.
+
+### Build Process
+- Standard Maven lifecycle (compile, test, package)
+- UTF-8 encoding for all source files
+- No external dependencies beyond Nukkit API
+
+## Development Setup
+
+### Import to IDE
+- **IntelliJ IDEA**: `File → Open → Select pom.xml`
+- **Eclipse**: `File → Import → Maven → Existing Maven Projects`
+
+### Project Structure
+- **Source code**: `src/main/java/`
+- **Resources**: `src/main/resources/`
+- **Tests**: `src/test/java/` (if applicable)
+
+## Quick Build Scripts
+
+### Linux/Mac (`build.sh`)
+```bash
+#!/bin/bash
+echo "Building CustomRank..."
+mvn clean package
+if [ $? -eq 0 ]; then
+    echo "Build successful! JAR file: target/CustomRank-1.6.8.jar"
+else
+    echo "Build failed!"
+    exit 1
+fi
+```
+
+### Windows (`build.bat`)
+```batch
+@echo off
+echo Building CustomRank...
+call mvn clean package
+if %errorlevel% equ 0 (
+    echo Build successful! JAR file: target/CustomRank-1.6.8.jar
+) else (
+    echo Build failed!
+    exit /b 1
+)
+```
+
+Make the script executable (Linux/Mac):
+```bash
+chmod +x build.sh
+```
+
+## Testing the Build
+
+After successful build, you can test the plugin by:
+
+1. **Copy the JAR** to your Nukkit server's plugins folder:
+```bash
+cp target/CustomRank-1.6.8.jar /path/to/nukkit/plugins/
+```
+
+2. **Start/Restart** your Nukkit server
+
+3. **Verify the plugin loads** in the console:
+```
+[CustomRank] Plugin successfully enabled!
+[CustomRank] Registered {cusrank} variable successfully
+```
+
+## Troubleshooting
+
+### Common Issues
+
+#### Maven not found
+**Ubuntu/Debian:**
+```bash
+sudo apt-get install maven
+```
+
+**macOS:**
+```bash
+brew install maven
+```
+
+**Windows:**
+Download from [Apache Maven website](https://maven.apache.org/download.cgi)
+
+#### Java version mismatch
+Ensure Java 21 is installed and set as default:
+```bash
+java -version
+# Should show version 21 or higher
+```
+
+Set JAVA_HOME (if needed):
+```bash
+# Linux/Mac
+export JAVA_HOME=/path/to/java21
+
+# Windows
+set JAVA_HOME=C:\path\to\java21
+```
+
+#### Nukkit dependency not resolved
+Make sure you have access to the Nukkit Maven repository. If using a custom Nukkit build, install it to your local Maven repository:
+```bash
+mvn install:install-file \
+    -Dfile=path/to/nukkit.jar \
+    -DgroupId=cn.nukkit \
+    -DartifactId=nukkit \
+    -Dversion=1.0-SNAPSHOT \
+    -Dpackaging=jar
+```
+
+#### Build failures
+Clean the project and rebuild:
+```bash
+mvn clean
+mvn compile
+```
+
+Check for compilation errors:
+```bash
+mvn compile 2>&1 | grep -A 5 -B 5 "error"
+```
+
+## Continuous Integration
+
+The project is Maven-ready for CI/CD pipelines. Sample GitHub Actions workflow (`.github/workflows/build.yml`):
+
+```yaml
+name: Build CustomRank
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: 'maven'
+    
+    - name: Build with Maven
+      run: mvn clean package
+      
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: CustomRank
+        path: target/*.jar
+        retention-days: 7
+```
+
+## Version Information
+
+- **Current Version**: 1.6.8
+- **Nukkit Compatibility**: 1.0.0+
+- **Build Tool**: Apache Maven 3.6+
+- **Java Version**: 21+
+
+## Release Build
+
+To create a release build with optimized settings:
+
+```bash
+# Skip tests and create optimized build
+mvn clean package -DskipTests
+
+# Create JAR with timestamp
+mvn clean package -DbuildTimestamp=$(date +%Y%m%d%H%M%S)
+```
+
+## Dependency Management
+
+This plugin has minimal external dependencies:
+- **Required**: Nukkit API (provided at runtime)
+- **Optional**: Tips plugin (runtime only, for variable support)
+- **No bundled dependencies**: All dependencies are `provided` scope
+
+The build process follows standard Maven conventions, making it easy to integrate with existing development workflows and CI/CD pipelines.
 
 ## Runtime Dependencies
 
@@ -179,11 +408,7 @@ For issues, feature requests, or contributions:
 3. Provide detailed error logs if reporting bugs
 4. Follow the existing code style for contributions
 
-## 📝 License
+## License
 
 GPL-V3.0 License
 (Because it inherits from a class in the Tips plugin, but Tips is open-sourced under the GPL-V3.0 license.)
-
----
-
-*Note: This plugin is designed for Nukkit servers and requires a compatible server implementation. Always test plugins in a development environment before deploying to production.*
