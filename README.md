@@ -1,5 +1,10 @@
 # CustomRank Plugin
 
+[![Stars](https://img.shields.io/github/stars/GongSunFangYun/CustomRank?style=flat-square)]()
+[![Forks](https://img.shields.io/github/forks/GongSunFangYun/CustomRank?style=flat-square)]()
+[![Issues](https://img.shields.io/github/issues/GongSunFangYun/CustomRank?style=flat-square)]()
+[![License](https://img.shields.io/github/license/GongSunFangYun/CustomRank?style=flat-square)]()
+
 A comprehensive and feature-rich rank management plugin for Nukkit servers, providing advanced player rank systems with time-based permissions, customizable display names, and seamless integration with popular server utilities.
 
 ## Features
@@ -410,5 +415,5 @@ For issues, feature requests, or contributions:
 
 ## License
 
-GPL-V3.0 License
-(Because it inherits from a class in the Tips plugin, but Tips is open-sourced under the GPL-V3.0 license.)
+GPL-3.0 License
+(Because it inherits from a class in the Tips plugin, but Tips is open-sourced under the GPL-3.0 license.)
