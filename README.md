@@ -58,7 +58,7 @@ A comprehensive and feature-rich rank management plugin for Nukkit servers, prov
 /rank give @r Helper 30m
 ```
 
-## 🛠️ Building
+## Build Support
 
 ### Prerequisites
 - Java 21 or higher
