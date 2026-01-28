@@ -1,0 +1,32 @@
+name: CustomRank
+version: 1.6.8
+main: cn.gsfy.RankMain
+api: ["1.0.6"]
+author: GongSunFangYun
+softdepend: [Tips]
+
+permissions:
+  rank.give:
+    description: Allows setting player ranks
+    default: op
+  rank.take:
+    description: Allows removing player ranks
+    default: op
+  rank.create:
+    description: Allows creating new ranks
+    default: op
+  rank.delete:
+    description: Allows deleting ranks
+    default: op
+  rank.listall:
+    description: Allows listing all ranks
+    default: op
+  rank.use:
+    description: Allows using ranks
+    default: true
+  rank.check:
+    description: Allows checking available ranks
+    default: true
+  rank.clear:
+    description: Allows clearing current rank
+    default: true
