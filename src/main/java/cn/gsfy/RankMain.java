@@ -19,7 +19,6 @@ public class RankMain extends PluginBase {
 
     @Override
     public void onEnable() {
-        // 插件信息
         getLogger().info("");
         getLogger().info(TextFormat.GOLD + "||" + TextFormat.GREEN + " CustomRank Plugin");
         getLogger().info(TextFormat.GOLD + "||" + TextFormat.GREEN + " Author: " + TextFormat.YELLOW + "GongSunFangYun");
@@ -27,44 +26,34 @@ public class RankMain extends PluginBase {
         getLogger().info("");
         getLogger().info(TextFormat.GREEN + "Plugin successfully enabled!");
 
-        // 创建插件目录
         File dataFolder = this.getDataFolder();
         if (!dataFolder.exists() && !dataFolder.mkdirs()) {
             getLogger().error("Failed to create data folder!");
             return;
         }
 
-        // 加载数据文件
         this.playerRanks = new Config(new File(dataFolder, "player_ranks.json"), Config.JSON);
         this.baseRanks = new Config(new File(dataFolder, "base_ranks.json"), Config.JSON);
-
-        // 初始化组件
+        
         this.rankCommand = new RankCommand(this);
         this.rankScheduler = new RankScheduler(this);
         this.rankVarRegister = new RankVarRegister(this);
 
-        // 注册事件和命令
         this.getServer().getPluginManager().registerEvents(rankCommand, this);
         this.getServer().getPluginManager().registerEvents(rankScheduler, this);
         this.getServer().getCommandMap().register("rank", rankCommand);
 
-        // 初始化默认数据
         if (baseRanks.getAll().isEmpty()) {
             baseRanks.save();
         }
 
-        // 迁移旧数据格式
         migrateOldData();
 
-        // 为所有在线玩家应用称号
         for (Player player : getServer().getOnlinePlayers().values()) {
             rankScheduler.applyActiveRank(player);
         }
 
-        // 启动调度器
         rankScheduler.startSchedulers();
-
-        // 注册变量
         rankVarRegister.registerVariables();
     }
 
@@ -104,7 +93,6 @@ public class RankMain extends PluginBase {
         }
     }
 
-    // Getter methods
     public Config getPlayerRanks() {
         return playerRanks;
     }
